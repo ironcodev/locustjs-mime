@@ -1,4 +1,4 @@
-import { NotImplementedException } from 'locustjs-base'
+import { NotImplementedException, isSomeString, isEmpty } from 'locustjs-base';
 
 let __mimes;
 let __mimeTypes;
@@ -3007,6 +3007,7 @@ class MimeProviderBase {
 	}
 	getFullMime (filenameOrExtension) { NotImplementedException('getFullMime') }
 	getMimeType (filenameOrExtension) { NotImplementedException('getMimeType') }
+	getExtensions(mime) { NotImplementedException('getExtensions') }
 }
 
 class MimeProviderDefault extends MimeProviderBase {
@@ -3015,10 +3016,10 @@ class MimeProviderDefault extends MimeProviderBase {
 		const ext = this.getExtension(filenameOrExtension);
 
 		if (ext) {
-			const mimeType = MimeTypes.find(mt => mt.extension == ext && mt.isDefault);
+			const mimeType = this.MimeTypes.find(mt => mt.extension == ext && mt.isDefault);
 			
 			if (mimeType) {
-				result = Mimes[mimeType.mimeId - 1];
+				result = this.Mimes[mimeType.mimeId - 1];
 			}
 		}
 
@@ -3029,13 +3030,26 @@ class MimeProviderDefault extends MimeProviderBase {
 		const ext = this.getExtension(filenameOrExtension);
 
 		if (ext) {
-			const mimeType = MimeTypes.find(mt => mt.extension == ext && mt.isDefault);
+			const mimeType = this.MimeTypes.find(mt => mt.extension == ext && mt.isDefault);
 			
 			if (mimeType) {
-				result = Mimes[mimeType.mimeId - 1].value;
+				result = this.Mimes[mimeType.mimeId - 1].value;
 			}
 		}
 
+		return result;
+	}
+	getExtensions(mime) {
+		const mimeInfo = isSomeString(mime) ? this.Mimes.find(x => x.value == mime): null;
+		const extensions = isEmpty(mimeInfo) ? '': mimeInfo.extensions;
+		const arr = extensions.split(',');
+		
+		let result = [];
+		
+		for (let ext of arr) {
+			result.push(ext.trim());
+		}
+		
 		return result;
 	}
 }

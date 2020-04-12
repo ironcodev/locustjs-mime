@@ -1,25 +1,25 @@
 {
-  "name": "locustjs-extensions-options",
-  "version": "1.0.3",
-  "description": "This library provides a shouldExtend() function for other locustjs-extensions libraries",
+  "name": "locustjs-mime",
+  "version": "1.0.0",
+  "description": "This library provides mime support",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ironcodev/locustjs-extensions-options.git"
+    "url": "git+https://github.com/ironcodev/locustjs-mime.git"
   },
   "keywords": [
     "locustjs",
-    "extensions"
+    "mime"
   ],
   "author": "Iron Code",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ironcodev/locustjs-extensions-options/issues"
+    "url": "https://github.com/ironcodev/locustjs-mime/issues"
   },
-  "homepage": "https://github.com/ironcodev/locustjs-extensions-options#readme",
+  "homepage": "https://github.com/ironcodev/locustjs-mime#readme",
   "dependencies": {
     "locustjs-base": "^1.0.3"
   }

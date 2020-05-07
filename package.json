@@ -1,8 +1,9 @@
 {
   "name": "locustjs-mime",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "This library provides mime support",
-  "main": "index.js",
+  "main": "index.cjs.js",
+  "module": "index.esm.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -21,6 +22,6 @@
   },
   "homepage": "https://github.com/ironcodev/locustjs-mime#readme",
   "dependencies": {
-    "locustjs-base": "^1.0.3"
+    "locustjs-base": "^1.0.4"
   }
 }

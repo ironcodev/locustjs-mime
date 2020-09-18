@@ -1,4 +1,5 @@
-import { NotImplementedException, isSomeString, isEmpty } from 'locustjs-base';
+import { isSomeString, isEmpty } from 'locustjs-base';
+import { throwIfInstantiateAbstract, throwNotImplementedException } from 'locustjs-exception';
 
 let __mimes;
 let __mimeTypes;
@@ -2975,10 +2976,24 @@ const _initMimeTypes = function () {
 
 class MimeProviderBase {
 	constructor() {
-		if (this.constructor === MimeProviderBase) {
-            throw 'MimeProviderBase is an abstract class. You cannot instantiate from it.'
-        }
+		throwIfInstantiateAbstract(MimeProviderBase, this);
 	}
+	getExtension (filenameOrExtension) {
+		let result = '';
+		let dotIndex = (filenameOrExtension || '').lastIndexOf('.');
+		
+		if (dotIndex >= 0) {
+			result = (filenameOrExtension.substr(dotIndex + 1) || '').toLowerCase();
+		}
+		
+		return result;
+	}
+	getFullMime (filenameOrExtension) { throwNotImplementedException('getFullMime') }
+	getMimeType (filenameOrExtension) { throwNotImplementedException('getMimeType') }
+	getExtensions(mime) { throwNotImplementedException('getExtensions') }
+}
+
+class MimeProviderDefault extends MimeProviderBase {
 	get MimeTypes() {
 		if (!__mimes) {
 			_initMimes();
@@ -2995,24 +3010,8 @@ class MimeProviderBase {
 		
 		return __mimes;
 	}
-	getExtension (filenameOrExtension) {
-		let result = '';
-		let dotIndex = (filenameOrExtension || '').lastIndexOf('.');
-		
-		if (dotIndex >= 0) {
-			result = (filenameOrExtension.substr(dotIndex + 1) || '').toLowerCase();
-		}
-		
-		return result;
-	}
-	getFullMime (filenameOrExtension) { NotImplementedException('getFullMime') }
-	getMimeType (filenameOrExtension) { NotImplementedException('getMimeType') }
-	getExtensions(mime) { NotImplementedException('getExtensions') }
-}
-
-class MimeProviderDefault extends MimeProviderBase {
 	getFullMime(filenameOrExtension) {
-		let result = Mimes[208]; // 'application/octet-stream';
+		let result = this.Mimes[208]; // 'application/octet-stream';
 		const ext = this.getExtension(filenameOrExtension);
 
 		if (ext) {

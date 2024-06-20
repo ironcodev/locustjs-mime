@@ -1,5 +1,5 @@
-import { isSomeString, isEmpty } from 'locustjs-base';
-import { throwIfInstantiateAbstract, throwNotImplementedException } from 'locustjs-exception';
+import { isSomeString, isEmpty } from '@locustjs/base';
+import { throwIfInstantiateAbstract, throwNotImplementedException } from '@locustjs/exception';
 
 let __mimes;
 let __mimeTypes;

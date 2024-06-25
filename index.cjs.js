@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = exports.__mimes = exports.__mimeTypes = exports.MimeProviderDefault = exports.MimeProviderBase = void 0;
+exports["default"] = exports.__mimes = exports.__mimeTypes = exports.MimeProviderProxy = exports.MimeProviderDefault = exports.MimeProviderBase = void 0;
 exports.setMimeProvider = setMimeProvider;
 var _base = require("@locustjs/base");
 var _exception = require("@locustjs/exception");
@@ -146,25 +146,57 @@ var MimeProviderDefault = exports.MimeProviderDefault = /*#__PURE__*/function (_
         return x.value == mime;
       }) : null;
       var extensions = (0, _base.isEmpty)(mimeInfo) ? '' : mimeInfo.extensions;
-      var arr = extensions.split(',');
       var result = [];
-      var _iterator = _createForOfIteratorHelper(arr),
-        _step;
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var ext = _step.value;
-          result.push(ext.trim());
+      if (extensions) {
+        var arr = extensions.split(',');
+        var _iterator = _createForOfIteratorHelper(arr),
+          _step;
+        try {
+          for (_iterator.s(); !(_step = _iterator.n()).done;) {
+            var ext = _step.value;
+            result.push(ext.trim());
+          }
+        } catch (err) {
+          _iterator.e(err);
+        } finally {
+          _iterator.f();
         }
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
       }
       return result;
     }
   }]);
 }(MimeProviderBase);
-var Mime = new MimeProviderDefault();
+var MimeProviderProxy = exports.MimeProviderProxy = /*#__PURE__*/function (_MimeProviderBase2) {
+  function MimeProviderProxy(mimeProvider) {
+    var _this;
+    _classCallCheck(this, MimeProviderProxy);
+    _this = _callSuper(this, MimeProviderProxy);
+    (0, _exception.throwIfNotInstanceOf)('mimeProvider', MimeProviderBase, mimeProvider);
+    _this.instance = mimeProvider;
+    return _this;
+  }
+  _inherits(MimeProviderProxy, _MimeProviderBase2);
+  return _createClass(MimeProviderProxy, [{
+    key: "getFullMime",
+    value: function getFullMime() {
+      var _this$instance;
+      return (_this$instance = this.instance).getFullMime.apply(_this$instance, arguments);
+    }
+  }, {
+    key: "getMimeType",
+    value: function getMimeType() {
+      var _this$instance2;
+      return (_this$instance2 = this.instance).getMimeType.apply(_this$instance2, arguments);
+    }
+  }, {
+    key: "getExtensions",
+    value: function getExtensions() {
+      var _this$instance3;
+      return (_this$instance3 = this.instance).getExtensions.apply(_this$instance3, arguments);
+    }
+  }]);
+}(MimeProviderBase);
+var Mime = new MimeProviderProxy(new MimeProviderDefault());
 function setMimeProvider(mimeProvider) {
   if ((0, _base.isNullOrEmpty)(mimeProvider)) {
     throw 'null or undefined cannot be used as default mime provider.';
@@ -175,6 +207,6 @@ function setMimeProvider(mimeProvider) {
   if (!(mimeProvider instanceof MimeProviderBase)) {
     throw 'mime provider must be an instance of a subclass of MimeProviderBase.';
   }
-  Mime = mimeProvider;
+  Mime.instance = mimeProvider;
 }
 var _default = exports["default"] = Mime;

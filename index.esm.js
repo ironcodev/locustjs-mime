@@ -1,5 +1,5 @@
 import { isSomeString, isEmpty, isNullOrEmpty, isObject } from '@locustjs/base';
-import { throwIfInstantiateAbstract, throwNotImplementedException } from '@locustjs/exception';
+import { throwIfInstantiateAbstract, throwIfNotInstanceOf, throwNotImplementedException } from '@locustjs/exception';
 
 let __mimes;
 let __mimeTypes;
@@ -3041,19 +3041,40 @@ class MimeProviderDefault extends MimeProviderBase {
 	getExtensions(mime) {
 		const mimeInfo = isSomeString(mime) ? this.Mimes.find(x => x.value == mime): null;
 		const extensions = isEmpty(mimeInfo) ? '': mimeInfo.extensions;
-		const arr = extensions.split(',');
-		
 		let result = [];
-		
-		for (let ext of arr) {
-			result.push(ext.trim());
+
+		if (extensions) {
+			const arr = extensions.split(',');
+			
+			for (let ext of arr) {
+				result.push(ext.trim());
+			}
 		}
 		
 		return result;
 	}
 }
 
-let Mime = new MimeProviderDefault();
+class MimeProviderProxy extends MimeProviderBase {
+	constructor(mimeProvider) {
+		super()
+		
+		throwIfNotInstanceOf('mimeProvider', MimeProviderBase, mimeProvider)
+
+		this.instance = mimeProvider;
+	}
+	getFullMime (...args) {
+		return this.instance.getFullMime(...args)
+	}
+	getMimeType (...args) {
+		return this.instance.getMimeType(...args)
+	}
+	getExtensions(...args) {
+		return this.instance.getExtensions(...args)
+	}
+}
+
+const Mime = new MimeProviderProxy(new MimeProviderDefault())
 
 function setMimeProvider(mimeProvider) {
 	if (isNullOrEmpty(mimeProvider)) {
@@ -3066,7 +3087,7 @@ function setMimeProvider(mimeProvider) {
 		throw 'mime provider must be an instance of a subclass of MimeProviderBase.'
 	}
 
-	Mime = mimeProvider
+	Mime.instance = mimeProvider
 }
 
 export default Mime;
@@ -3076,5 +3097,6 @@ export {
 	__mimeTypes,
 	MimeProviderBase,
 	MimeProviderDefault,
+	MimeProviderProxy,
 	setMimeProvider
 }

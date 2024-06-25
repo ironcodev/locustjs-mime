@@ -1,12 +1,12 @@
 {
   "name": "@locustjs/mime",
-  "version": "2.0.1",
-  "description": "This library provides mime support",
+  "version": "2.0.2",
+  "description": "This library provides classes and a helper to work with MIME.",
   "main": "index.cjs.js",
   "module": "index.esm.js",
   "scripts": {
     "build": "babel index.esm.js -o index.cjs.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node -r esm ./tests/index.js"
   },
   "repository": {
     "type": "git",
@@ -14,6 +14,7 @@
   },
   "keywords": [
     "locustjs",
+    "javascript",
     "mime"
   ],
   "author": "Iron Code",
@@ -25,10 +26,12 @@
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.6",
-    "@babel/preset-env": "^7.9.6"
+    "@babel/preset-env": "^7.9.6",
+    "esm": "^3.2.25"
   },
   "dependencies": {
     "@locustjs/base": "^4.0.0",
-    "@locustjs/exception": "^2.0.2"
+    "@locustjs/exception": "^2.0.2",
+    "@locustjs/test": "^1.6.1"
   }
 }

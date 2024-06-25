@@ -1,4 +1,4 @@
-import { isSomeString, isEmpty } from '@locustjs/base';
+import { isSomeString, isEmpty, isNullOrEmpty, isObject } from '@locustjs/base';
 import { throwIfInstantiateAbstract, throwNotImplementedException } from '@locustjs/exception';
 
 let __mimes;
@@ -3053,7 +3053,21 @@ class MimeProviderDefault extends MimeProviderBase {
 	}
 }
 
-const Mime = new MimeProviderDefault();
+let Mime = new MimeProviderDefault();
+
+function setMimeProvider(mimeProvider) {
+	if (isNullOrEmpty(mimeProvider)) {
+		throw 'null or undefined cannot be used as default mime provider.'
+	}
+	if (!isObject(mimeProvider)) {
+		throw 'given mime provider is not an object.'
+	}
+	if (!(mimeProvider instanceof MimeProviderBase)) {
+		throw 'mime provider must be an instance of a subclass of MimeProviderBase.'
+	}
+
+	Mime = mimeProvider
+}
 
 export default Mime;
 
@@ -3061,5 +3075,6 @@ export {
 	__mimes,
 	__mimeTypes,
 	MimeProviderBase,
-	MimeProviderDefault
+	MimeProviderDefault,
+	setMimeProvider
 }
